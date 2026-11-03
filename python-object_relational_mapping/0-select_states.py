@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-"""Lists all states from the database hbtn_0e_0_usa."""
+"""Lists all states from the database."""
 
 import MySQLdb
 import sys
 
 
 def main():
-    """Connect to MySQL and list all states."""
+    """Connect to MySQL and retrieve all states."""
 
     db = MySQLdb.connect(
         host="localhost",
         port=3306,
         user=sys.argv[1],
         passwd=sys.argv[2],
-        db=sys.argv[3
-        ]
+        db=sys.argv[3]
     )
 
     cur = db.cursor()
