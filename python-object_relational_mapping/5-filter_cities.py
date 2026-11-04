@@ -9,26 +9,23 @@ if __name__ == "__main__":
         port=3306,
         user=sys.argv[1],
         passwd=sys.argv[2],
-        db=sys.argv[3]
+        database=sys.argv[3]
     )
 
     cursor = db.cursor()
 
-    cursor.execute(
-        """
-        SELECT cities.id, cities.name
+    query = """
+        SELECT cities.name
         FROM cities
-        INNER JOIN states ON cities.state_id = states.id
+        JOIN states ON cities.state_id = states.id
         WHERE states.name = %s
         ORDER BY cities.id ASC
-        """,
-        (sys.argv[4],)
-    )
+    """
 
-    rows = cursor.fetchall()
+    cursor.execute(query, (sys.argv[4],))
 
-    for row in rows:
-        print(row)
+    for row in cursor.fetchall():
+        print(row[0])
 
     cursor.close()
     db.close()
