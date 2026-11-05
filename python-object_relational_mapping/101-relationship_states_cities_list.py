@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Lists all State objects and their related City objects."""
+"""Lists all states and their related cities."""
 
 import sys
 from sqlalchemy import create_engine
