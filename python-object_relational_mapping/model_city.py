@@ -7,7 +7,7 @@ from model_state import Base
 
 
 class City(Base):
-    """Represents a city."""
+    """City class."""
 
     __tablename__ = 'cities'
 
@@ -33,10 +33,3 @@ class City(Base):
         "State",
         back_populates="cities"
     )
-
-    cities = relationship(
-    "City",
-    back_populates="state",
-    cascade="all, delete-orphan"
-)
-
