@@ -4,7 +4,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# Store users in memory (no testing data)
+# Store users in memory
 users = {}
 
 
@@ -33,30 +33,31 @@ def get_user(username):
 
 @app.route("/add_user", methods=["POST"])
 def add_user():
-    # Parse incoming JSON data
+    # Get JSON data from the request
     data = request.get_json(silent=True)
 
     # Check for invalid JSON
     if not isinstance(data, dict):
         return jsonify({"error": "Invalid JSON"}), 400
 
-    # Check if username is provided
+    # Check for missing username
     username = data.get("username")
 
     if not username:
         return jsonify({"error": "Username is required"}), 400
 
-    # Check if username already exists
+    # Check for duplicate username
     if username in users:
         return jsonify({"error": "Username already exists"}), 409
 
-    # Add the new user
+    # Add user to dictionary
     users[username] = data
 
+    # Return confirmation
     return jsonify({
         "message": "User added successfully",
-        "user": users[username]
-    }), 201
+        "user": data
+    }), 200
 
 
 if __name__ == "__main__":
