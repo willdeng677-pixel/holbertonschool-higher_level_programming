@@ -2,15 +2,19 @@
 
 import unittest
 import requests
-import json
-import time
-import subprocess
-
 
 BASE_URL = "http://127.0.0.1:5000"
 
 
 class TestFlaskAPI(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Restart Flask before running tests to ensure clean data
+        response = requests.get(BASE_URL + "/data")
+        if response.status_code == 200:
+            if response.json():
+                print("Warning: Existing users found. Restart Flask first.")
 
     def test_home(self):
         response = requests.get(BASE_URL + "/")
@@ -30,10 +34,7 @@ class TestFlaskAPI(unittest.TestCase):
             "city": "New York"
         }
 
-        response = requests.post(
-            BASE_URL + "/add_user",
-            json=user
-        )
+        response = requests.post(BASE_URL + "/add_user", json=user)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["user"], user)
@@ -46,22 +47,16 @@ class TestFlaskAPI(unittest.TestCase):
     def test_get_user(self):
         response = requests.get(BASE_URL + "/users/john")
         self.assertEqual(response.status_code, 200)
-
         self.assertEqual(response.json()["name"], "John")
         self.assertEqual(response.json()["age"], 30)
 
     def test_user_not_found(self):
         response = requests.get(BASE_URL + "/users/doesnotexist")
-
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(
-            response.json(),
-            {"error": "User not found"}
-        )
+        self.assertEqual(response.json(), {"error": "User not found"})
 
     def test_status(self):
         response = requests.get(BASE_URL + "/status")
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.text, "OK")
 
@@ -70,12 +65,8 @@ class TestFlaskAPI(unittest.TestCase):
             BASE_URL + "/add_user",
             json={"name": "Jane", "age": 28}
         )
-
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(
-            response.json(),
-            {"error": "Username is required"}
-        )
+        self.assertEqual(response.json(), {"error": "Username is required"})
 
     def test_duplicate_username(self):
         user = {
@@ -85,11 +76,7 @@ class TestFlaskAPI(unittest.TestCase):
             "city": "New York"
         }
 
-        response = requests.post(
-            BASE_URL + "/add_user",
-            json=user
-        )
-
+        response = requests.post(BASE_URL + "/add_user", json=user)
         self.assertEqual(response.status_code, 409)
         self.assertEqual(
             response.json(),
