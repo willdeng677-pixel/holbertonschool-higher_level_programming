@@ -1,6 +1,6 @@
 #!/usr/bin/node
-const executeXtimes = require('101-call_me_moby.js');
+const callMeMoby = require('./101-call_me_moby.js');
 
-executeXtimes(3, function () {
-    console.log("C is fun");
+callMeMoby(5, function () {
+    console.log('Where I am!');
 });
