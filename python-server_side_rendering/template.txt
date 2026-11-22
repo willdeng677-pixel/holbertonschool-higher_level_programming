@@ -1,0 +1,8 @@
+Hello {name},
+
+You are invited to {event_title}!
+
+Event date: {event_date}
+Location: {event_location}
+
+We look forward to seeing you!
